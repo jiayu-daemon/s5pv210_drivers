@@ -1,0 +1,10 @@
+
+.global _start
+	
+_start:
+	ldr sp, =0xD0030000	@≥ı ºªØ∂—’ª
+	bl clock_init
+	bl ddr_init
+	
+	b main
+

@@ -1,0 +1,32 @@
+tslib-one-wire.tar.bz2已经上传自同文件夹中，这是一个已经打过补丁，支持一线触摸屏测试的tslib
+
+编译：
+tar xjvf tslib-one-wire.tar.bz2
+cd tslib-1.0.0
+./autogen.sh
+
+mkdir tmp
+echo "ac_cv_func_malloc_0_nonnull=yes" >arm-linux.cache
+./configure --host=arm-linux --cache-file=arm-linux.cache --prefix=$(pwd)/tmp
+make
+make install
+
+修改ts.conf
+echo "module_raw one_wire_ts_input" > ts.conf.bck
+cat $PWD/tmp/etc/ts.conf >>ts.conf.bck
+mv ts.conf.bck $PWD/tmp/etc/ts.conf
+
+安装到开发板：
+cd tmp
+cp * -rfd /nfsroot
+-----------------------------------------------------------------------------
+	注意：以上操作都是在PC上面执行
+----------------------------------------------------------------------------
+export TSLIB_CALIBFILE=/etc/pointercal
+export TSLIB_CONFFILE=/etc/ts.conf
+export TSLIB_PLUGINDIR=/lib/ts
+export TSLIB_CONSOLEDEVICE=none
+export TSLIB_FBDEVICE=/dev/fb0
+export TSLIB_TSDEVICE=/dev/tiny_ts
+
+ts_calibrate

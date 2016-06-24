@@ -1,0 +1,28 @@
+编译时出现：
+drivers/net/dm9000.c:1612: error: 'struct dm9000_plat_data' has no member named 'param_addr'
+
+请将linux-2.6.35.7\include\linux\dm9000.h中的
+struct dm9000_plat_data {
+	unsigned int	flags;
+	unsigned char	dev_addr[6];
+
+	/* allow replacement IO routines */
+
+	void	(*inblk)(void __iomem *reg, void *data, int len);
+	void	(*outblk)(void __iomem *reg, void *data, int len);
+	void	(*dumpblk)(void __iomem *reg, int len);
+};
+
+改为：
+struct dm9000_plat_data {
+	unsigned int	flags;
+	unsigned char	dev_addr[6];
+	unsigned char	param_addr[6];
+
+	/* allow replacement IO routines */
+
+	void	(*inblk)(void __iomem *reg, void *data, int len);
+	void	(*outblk)(void __iomem *reg, void *data, int len);
+	void	(*dumpblk)(void __iomem *reg, int len);
+};
+
